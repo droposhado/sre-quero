@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: application-sc
+  labels:
+    app: application-sc
+spec:
+  containers:
+    - name: main-application
+      image: quay.io/droposhado/application:latest
+      ports:
+        - containerPort: 8080
+          name: application-http
+      volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/app
+    - name: sidecar-container
+      image: grafana/promtail:2.0.0
+      ports:
+        - containerPort: 9080
+          name: promtail-http
+      args:
+        - -config.file=/etc/promtail/promtail.yaml
+      volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/app
+  volumes:
+    - name: shared-logs
+      emptyDir: {}

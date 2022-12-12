@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: application-sc
+  labels:
+    run: application-sc
+spec:
+  selector:
+    app: application-sc
+  ports:
+    - name: application-http
+      protocol: TCP
+      port: 8080
+      targetPort: application-http
+    - name: promtail-http
+      protocol: TCP
+      port: 9080
+      targetPort: promtail-http
